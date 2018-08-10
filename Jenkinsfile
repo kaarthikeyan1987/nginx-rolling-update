@@ -31,7 +31,7 @@ podTemplate(label: 'nginx', containers: [
                 stage('Deploy New Build To Kubernetes') {
                     sh ("kubectl run ${K8S_DEPLOYMENT_NAME} --image=${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --port=80")
 		    sh ("kubectl scale deployment/${K8S_DEPLOYMENT_NAME} --replicas=3")
-		    sh ("kubectl label deployment/${K8S_DEPLOYMENT_NAME} app=nginx-app")
+		    sh ("kubectl label deployment/${K8S_DEPLOYMENT_NAME} app=nginx")
 		    sh ("kubectl expose deployment/${K8S_DEPLOYMENT_NAME} --port=80 --target-port=80 --name=nginx-service --type=LoadBalancer")
              }
 
