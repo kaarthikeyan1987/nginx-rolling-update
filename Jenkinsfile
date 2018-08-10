@@ -1,5 +1,5 @@
 #!groovy​
-podTemplate(label: 'nginx-app', containers: [
+podTemplate(label: 'nginx', containers: [
     containerTemplate(name: 'kubectl', image: 'smesch/kubectl', ttyEnabled: true, command: 'cat',
         volumes: [secretVolume(secretName: 'kube-config', mountPath: '/root/.kube')]),
     containerTemplate(name: 'docker', image: 'docker', ttyEnabled: true, command: 'cat',
