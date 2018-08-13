@@ -1,4 +1,4 @@
-#!groovy​
+#!groovy<200b>
 podTemplate(label: 'nginx-app', containers: [
     containerTemplate(name: 'kubectl', image: 'smesch/kubectl', ttyEnabled: true, command: 'cat',
         volumes: [secretVolume(secretName: 'kube-config', mountPath: '/root/.kube')]),
@@ -16,7 +16,7 @@ podTemplate(label: 'nginx-app', containers: [
 
         stage('Clone nginx App Repository') {
             checkout scm
- 
+
             container('docker') {
                 stage('Docker Build & Push Current & Latest Versions') {
                     sh ("docker build -t ${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} .")
@@ -26,15 +26,12 @@ podTemplate(label: 'nginx-app', containers: [
                 }
             }
 
-               }
             container('kubectl') {
                 stage('Deploy New Build To Kubernetes') {
-                    sh ("kubectl run ${K8S_DEPLOYMENT_NAME} --image=${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} --port=80")
-		    sh ("kubectl scale deployment/${K8S_DEPLOYMENT_NAME} --replicas=3")
-		    sh ("kubectl label deployment/${K8S_DEPLOYMENT_NAME} app=tomcat-app")
-		    sh ("kubectl expose deployment/${K8S_DEPLOYMENT_NAME} --port=80 --target-port=8080 --name=nginx-service --type=LoadBalancer")
-             }
+                    sh ("kubectl set image deployment/${K8S_DEPLOYMENT_NAME} ${K8S_DEPLOYMENT_NAME}=${DOCKER_HUB_ACCOUNT}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+            }
 
-        }        
+        }
     }
 }
