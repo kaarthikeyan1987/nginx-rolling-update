@@ -1,2 +1,2 @@
-FROM demo-nginx:green
-MAINTAINER Kaarthikeyan <Kaarthikeyan.b@8kmiles.com>
+FROM kaarthikdocker\nginx-app:latest
+MAINTAINER Kaarthikeyan <kaarthikeyan.b@8kmiles.com>
